@@ -1,21 +1,24 @@
-
-const newQuoteButton = document.addEventListener('click', getQuote);
+const newQuoteButton = document.querySelector('.new-quote');
+newQuoteButton.addEventListener('click', getQuote);
 const endpoint = 'https://api.whatdoestrumpthink.com/api/v1/quotes/random';
-// function getQuote(){
-//   console.log('was clicked');
-// }
+const spinner = document.querySelector('#js-spinner');
 
 async function getQuote() {
+  spinner.classList.remove('hidden');
+  newQuoteButton.disabled = true;
+
   try {
     const response = await fetch(endpoint);
     if (!response.ok)
-      throw Error(response.statusText)
+    throw Error(response.statusText)
 
-  const json = await response.json();
-  displayQuote(json.message);
+    const json = await response.json();
+    displayQuote(json.message);
   } catch(e) {
-    console.log(e)
     alert('Failed');
+  } finally {
+    newQuoteButton.disabled = false;
+    spinner.classList.add('hidden');
   }
 }
 
